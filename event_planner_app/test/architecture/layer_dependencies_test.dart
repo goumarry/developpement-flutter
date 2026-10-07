@@ -69,7 +69,8 @@ void main() {
           for (final forbidden in forbiddenImports[layer]!) {
             // Un import relatif vers une autre couche remonte toujours par
             // `../` ; un import interne à la couche ne contient pas ce motif.
-            final crossesLayer = forbidden.endsWith('/') &&
+            final crossesLayer =
+                forbidden.endsWith('/') &&
                 !forbidden.startsWith('package:') &&
                 uri.contains('../$forbidden');
             if (crossesLayer || uri.startsWith(forbidden)) {

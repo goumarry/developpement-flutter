@@ -44,8 +44,9 @@ void main() {
     await tester.pump();
   }
 
-  testWidgets('formulaire vide : soumission refusée, erreurs affichées',
-      (tester) async {
+  testWidgets('formulaire vide : soumission refusée, erreurs affichées', (
+    tester,
+  ) async {
     await pumpForm(tester);
     await submit(tester);
 
@@ -54,8 +55,9 @@ void main() {
     expect(find.text('Confirmez votre adresse courriel.'), findsOneWidget);
   });
 
-  testWidgets('validation croisée : confirmation de courriel différente',
-      (tester) async {
+  testWidgets('validation croisée : confirmation de courriel différente', (
+    tester,
+  ) async {
     await pumpForm(tester);
     await fill(tester, confirmation: 'autre@example.org');
     await submit(tester);
@@ -64,8 +66,9 @@ void main() {
     expect(find.textContaining('ne correspondent pas'), findsOneWidget);
   });
 
-  testWidgets('validation croisée : plus de places que de places restantes',
-      (tester) async {
+  testWidgets('validation croisée : plus de places que de places restantes', (
+    tester,
+  ) async {
     await pumpForm(tester, remainingSeats: 2);
     await fill(tester, seats: '3');
     await submit(tester);
@@ -74,8 +77,9 @@ void main() {
     expect(find.textContaining('Il ne reste que 2'), findsOneWidget);
   });
 
-  testWidgets('saisie valide : soumission avec les valeurs nettoyées',
-      (tester) async {
+  testWidgets('saisie valide : soumission avec les valeurs nettoyées', (
+    tester,
+  ) async {
     await pumpForm(tester);
     await fill(tester, name: '  Ada Lovelace ', seats: '2');
     await submit(tester);

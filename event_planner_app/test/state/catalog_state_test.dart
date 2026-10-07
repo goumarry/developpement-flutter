@@ -41,7 +41,11 @@ void main() {
 
     final callsBefore = repository.calls.length;
     await catalog.loadMore();
-    expect(repository.calls, hasLength(callsBefore), reason: 'aucun appel inutile');
+    expect(
+      repository.calls,
+      hasLength(callsBefore),
+      reason: 'aucun appel inutile',
+    );
     expect(repository.calls.map((call) => call.skip), [0, 20, 40]);
   });
 
@@ -77,37 +81,41 @@ void main() {
     expect(catalog.hasMore, isFalse, reason: 'on ne pagine pas une copie');
   });
 
-  test('un chargement réussi met à jour la copie et sort du mode dégradé',
-      () async {
-    cache.snapshot = CatalogSnapshot(
-      events: [buildEvent()],
-      total: 1,
-      savedAt: DateTime(2026),
-    );
-    repository.failure = const NetworkFailure();
-    await catalog.loadFirstPage();
-    expect(catalog.isStale, isTrue);
+  test(
+    'un chargement réussi met à jour la copie et sort du mode dégradé',
+    () async {
+      cache.snapshot = CatalogSnapshot(
+        events: [buildEvent()],
+        total: 1,
+        savedAt: DateTime(2026),
+      );
+      repository.failure = const NetworkFailure();
+      await catalog.loadFirstPage();
+      expect(catalog.isStale, isTrue);
 
-    repository.failure = null;
-    await catalog.refresh();
+      repository.failure = null;
+      await catalog.refresh();
 
-    expect(catalog.isStale, isFalse);
-    expect(cache.snapshot!.events, hasLength(Pagination.pageSize));
-    expect(cache.writes, 1);
-  });
+      expect(catalog.isStale, isFalse);
+      expect(cache.snapshot!.events, hasLength(Pagination.pageSize));
+      expect(cache.writes, 1);
+    },
+  );
 
-  test('l\'échec d\'une page suivante conserve les pages déjà chargées',
-      () async {
-    await catalog.loadFirstPage();
-    repository.failure = const TimeoutFailure();
+  test(
+    'l\'échec d\'une page suivante conserve les pages déjà chargées',
+    () async {
+      await catalog.loadFirstPage();
+      repository.failure = const TimeoutFailure();
 
-    await catalog.loadMore();
+      await catalog.loadMore();
 
-    expect(catalog.status, CatalogStatus.loaded);
-    expect(catalog.events, hasLength(Pagination.pageSize));
-    expect(catalog.loadMoreError, isNotEmpty);
-    expect(catalog.isLoadingMore, isFalse);
-  });
+      expect(catalog.status, CatalogStatus.loaded);
+      expect(catalog.events, hasLength(Pagination.pageSize));
+      expect(catalog.loadMoreError, isNotEmpty);
+      expect(catalog.isLoadingMore, isFalse);
+    },
+  );
 
   test('le tri s\'applique aux événements chargés', () async {
     repository.events = [

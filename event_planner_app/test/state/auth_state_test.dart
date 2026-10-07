@@ -22,18 +22,20 @@ void main() {
     expect(auth.status, AuthStatus.unknown);
   });
 
-  test('une session qui prend fin toute seule est signalée comme expirée',
-      () async {
-    repository.emit(user);
-    await settle();
-    expect(auth.isSignedIn, isTrue);
+  test(
+    'une session qui prend fin toute seule est signalée comme expirée',
+    () async {
+      repository.emit(user);
+      await settle();
+      expect(auth.isSignedIn, isTrue);
 
-    repository.emit(null); // révocation côté serveur, sans signOut()
-    await settle();
+      repository.emit(null); // révocation côté serveur, sans signOut()
+      await settle();
 
-    expect(auth.status, AuthStatus.signedOut);
-    expect(auth.sessionExpired, isTrue);
-  });
+      expect(auth.status, AuthStatus.signedOut);
+      expect(auth.sessionExpired, isTrue);
+    },
+  );
 
   test('une déconnexion volontaire n\'est pas une session expirée', () async {
     repository.emit(user);

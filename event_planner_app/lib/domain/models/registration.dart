@@ -57,15 +57,16 @@ class Registration {
   bool isDuplicateOf(Registration other) =>
       other.eventId == eventId && other.participantKey == participantKey;
 
-  Registration copyWith({String? id, String? userId, int? seats}) {
+  /// La même inscription, rattachée au compte qui la confirme.
+  Registration withUser(String userId) {
     return Registration(
-      id: id ?? this.id,
-      userId: userId ?? this.userId,
+      id: id,
+      userId: userId,
       eventId: eventId,
       eventTitle: eventTitle,
       participantName: participantName,
       participantEmail: participantEmail,
-      seats: seats ?? this.seats,
+      seats: seats,
     );
   }
 

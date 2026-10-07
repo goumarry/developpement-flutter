@@ -92,10 +92,6 @@ class Event {
 
   bool get isFree => price == 0;
 
-  /// Taux de remplissage ramené à [0, 1] ; une capacité nulle vaut « plein ».
-  double get fillRatio =>
-      capacity <= 0 ? 1 : (registered / capacity).clamp(0, 1).toDouble();
-
   Event copyWith({
     String? id,
     String? title,

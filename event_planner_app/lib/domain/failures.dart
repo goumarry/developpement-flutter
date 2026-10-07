@@ -31,11 +31,8 @@ class TimeoutFailure extends AppFailure {
 
 /// Code HTTP inattendu (5xx notamment).
 class ServerFailure extends AppFailure {
-  const ServerFailure(this.statusCode, [String? message])
-    : super(
-        message ??
-            'Le service est momentanément indisponible (code $statusCode).',
-      );
+  const ServerFailure(this.statusCode)
+    : super('Le service est momentanément indisponible (code $statusCode).');
 
   final int statusCode;
 }

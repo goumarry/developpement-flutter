@@ -63,8 +63,8 @@ class FakeEventRepository implements EventRepository {
     final matches = query == null
         ? events
         : events
-            .where((e) => e.title.toLowerCase().contains(query.toLowerCase()))
-            .toList();
+              .where((e) => e.title.toLowerCase().contains(query.toLowerCase()))
+              .toList();
     return EventPage(
       events: matches.skip(skip).take(limit).toList(),
       total: matches.length,
@@ -139,10 +139,7 @@ class FakeAuthRepository implements AuthRepository {
   }
 
   @override
-  Future<void> register({
-    required String email,
-    required String password,
-  }) =>
+  Future<void> register({required String email, required String password}) =>
       signIn(email: email, password: password);
 
   @override

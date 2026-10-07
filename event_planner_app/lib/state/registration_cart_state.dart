@@ -167,7 +167,7 @@ class RegistrationCartState extends ChangeNotifier {
     ActionResult result;
     try {
       final status = await _repository.confirmAll([
-        for (final line in _lines) line.copyWith(userId: userId),
+        for (final line in _lines) line.withUser(userId),
       ]);
       _lines.clear();
       result = ActionResult.fromWrite(status);

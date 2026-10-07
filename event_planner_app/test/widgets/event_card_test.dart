@@ -7,8 +7,9 @@ import '../support/fakes.dart';
 import 'harness.dart';
 
 void main() {
-  testWidgets('capacité atteinte : la jauge affiche « Complet »',
-      (tester) async {
+  testWidgets('capacité atteinte : la jauge affiche « Complet »', (
+    tester,
+  ) async {
     await tester.pumpWidget(
       testApp(EventCard(event: buildEvent(capacity: 40, registered: 40))),
     );
@@ -22,8 +23,9 @@ void main() {
     );
   });
 
-  testWidgets('places disponibles : la jauge affiche le décompte',
-      (tester) async {
+  testWidgets('places disponibles : la jauge affiche le décompte', (
+    tester,
+  ) async {
     await tester.pumpWidget(
       testApp(EventCard(event: buildEvent(capacity: 40, registered: 12))),
     );
@@ -32,8 +34,9 @@ void main() {
     expect(find.text('Complet'), findsNothing);
   });
 
-  testWidgets('aucun débordement : écran étroit, titre long, grande police',
-      (tester) async {
+  testWidgets('aucun débordement : écran étroit, titre long, grande police', (
+    tester,
+  ) async {
     tester.view.physicalSize = const Size(280, 600);
     tester.view.devicePixelRatio = 1;
     addTearDown(tester.view.reset);
@@ -46,7 +49,8 @@ void main() {
             children: [
               EventCard(
                 event: buildEvent(
-                  title: 'Un titre d\'événement démesurément long pour '
+                  title:
+                      'Un titre d\'événement démesurément long pour '
                       'vérifier que la carte ne déborde jamais',
                 ),
               ),

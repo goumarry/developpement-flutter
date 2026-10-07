@@ -9,9 +9,7 @@ enum CapacityDecision {
   rejectedNotEnoughSeats,
 
   /// Nombre de places demandé nul ou négatif.
-  rejectedInvalidSeats;
-
-  bool get isAccepted => this == accepted;
+  rejectedInvalidSeats,
 }
 
 /// Règle de capacité — **fonctions pures**, sans Flutter ni état : c'est le

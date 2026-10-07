@@ -105,17 +105,19 @@ void main() {
     expect(notifications, 0);
   });
 
-  test('confirmer enregistre le panier au nom de l\'utilisateur, puis le vide',
-      () async {
-    cart.bindUser('uid-1');
-    addAda();
+  test(
+    'confirmer enregistre le panier au nom de l\'utilisateur, puis le vide',
+    () async {
+      cart.bindUser('uid-1');
+      addAda();
 
-    final result = await cart.confirm();
+      final result = await cart.confirm();
 
-    expect(result.isSuccess, isTrue);
-    expect(cart.isEmpty, isTrue);
-    expect(repository.saved.single.userId, 'uid-1');
-  });
+      expect(result.isSuccess, isTrue);
+      expect(cart.isEmpty, isTrue);
+      expect(repository.saved.single.userId, 'uid-1');
+    },
+  );
 
   test('un refus du serveur à la confirmation conserve le panier', () async {
     cart.bindUser('uid-1');

@@ -22,7 +22,9 @@ void main() {
     testWidgets('ErrorView : message et reprise', (tester) async {
       var retries = 0;
       await tester.pumpWidget(
-        testApp(ErrorView(message: 'Serveur en panne', onRetry: () => retries++)),
+        testApp(
+          ErrorView(message: 'Serveur en panne', onRetry: () => retries++),
+        ),
       );
 
       expect(find.text('Serveur en panne'), findsOneWidget);
@@ -30,8 +32,9 @@ void main() {
       expect(retries, 1);
     });
 
-    testWidgets('SignInRequiredView : distingue la session expirée',
-        (tester) async {
+    testWidgets('SignInRequiredView : distingue la session expirée', (
+      tester,
+    ) async {
       await tester.pumpWidget(
         testApp(SignInRequiredView(reason: 'Pour continuer.', onSignIn: () {})),
       );
@@ -60,7 +63,8 @@ void main() {
         testApp(
           const EmptyView(
             title: 'Aucune inscription',
-            message: 'Un message d\'explication assez long pour ne pas tenir '
+            message:
+                'Un message d\'explication assez long pour ne pas tenir '
                 'sur un écran aussi petit sans défilement.',
           ),
         ),
@@ -105,8 +109,9 @@ void main() {
       expect(find.text('Salon'), findsOneWidget);
     });
 
-    testWidgets('recherche sans résultat : vue vide, pas vue d\'erreur',
-        (tester) async {
+    testWidgets('recherche sans résultat : vue vide, pas vue d\'erreur', (
+      tester,
+    ) async {
       await catalog.loadFirstPage(query: 'introuvable');
       await pumpCatalog(tester);
       expect(find.byType(EmptyView), findsOneWidget);
@@ -114,8 +119,9 @@ void main() {
       expect(find.byType(ErrorView), findsNothing);
     });
 
-    testWidgets('erreur serveur sans copie locale : vue d\'erreur',
-        (tester) async {
+    testWidgets('erreur serveur sans copie locale : vue d\'erreur', (
+      tester,
+    ) async {
       repository.failure = const ServerFailure(500);
       await catalog.loadFirstPage();
       await pumpCatalog(tester);
@@ -123,8 +129,9 @@ void main() {
       expect(find.byType(EmptyView), findsNothing);
     });
 
-    testWidgets('mode dégradé : la copie locale et le bandeau « pas frais »',
-        (tester) async {
+    testWidgets('mode dégradé : la copie locale et le bandeau « pas frais »', (
+      tester,
+    ) async {
       cache.snapshot = CatalogSnapshot(
         events: [buildEvent(title: 'En cache')],
         total: 1,
@@ -135,7 +142,7 @@ void main() {
       await pumpCatalog(tester);
 
       expect(find.text('En cache'), findsOneWidget);
-      expect(find.textContaining('Hors connexion'), findsOneWidget);
+      expect(find.textContaining('Catalogue non actualisé'), findsOneWidget);
       expect(find.byType(ErrorView), findsNothing);
     });
   });
@@ -144,8 +151,9 @@ void main() {
     testWidgets('non connecté puis session expirée', (tester) async {
       final authRepository = FakeAuthRepository();
       final auth = AuthState(repository: authRepository);
-      final cart =
-          RegistrationCartState(repository: FakeRegistrationRepository());
+      final cart = RegistrationCartState(
+        repository: FakeRegistrationRepository(),
+      );
       addTearDown(auth.dispose);
       addTearDown(cart.dispose);
 

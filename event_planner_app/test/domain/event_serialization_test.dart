@@ -35,9 +35,7 @@ void main() {
   });
 
   test('Event : un événement sans propriétaire reste sans propriétaire', () {
-    final publicEvent = Event.fromJson(
-      (event.toJson()..remove('ownerId')),
-    );
+    final publicEvent = Event.fromJson((event.toJson()..remove('ownerId')));
     expect(publicEvent.ownerId, isNull);
   });
 
@@ -67,7 +65,10 @@ void main() {
 
   test('CatalogSnapshot : aller-retour JSON (copie locale du catalogue)', () {
     final snapshot = CatalogSnapshot(
-      events: [event, event.copyWith(id: '43')],
+      events: [
+        event,
+        event.copyWith(id: '43'),
+      ],
       total: 194,
       savedAt: DateTime(2026, 10, 7, 14, 30),
     );

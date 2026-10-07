@@ -27,6 +27,12 @@ class HomeShellScreen extends StatefulWidget {
 class _HomeShellScreenState extends State<HomeShellScreen> {
   int _index = 0;
 
+  /// Clé globale du contenu : quand la largeur franchit le seuil (rotation,
+  /// fenêtre redimensionnée), le contenu change de parent. Sans cette clé,
+  /// Flutter le détruirait et le recréerait — recherche en cours et position
+  /// de défilement perdues. Avec elle, il est déplacé avec son état.
+  final _bodyKey = GlobalKey();
+
   static const List<Widget> _pages = [
     CatalogScreen(),
     MyRegistrationsScreen(),
@@ -48,7 +54,10 @@ class _HomeShellScreenState extends State<HomeShellScreen> {
       label: Text('$pending'),
       child: const Icon(Icons.confirmation_number_outlined),
     );
-    final body = IndexedStack(index: _index, children: _pages);
+    final body = KeyedSubtree(
+      key: _bodyKey,
+      child: IndexedStack(index: _index, children: _pages),
+    );
 
     return LayoutBuilder(
       builder: (context, constraints) {

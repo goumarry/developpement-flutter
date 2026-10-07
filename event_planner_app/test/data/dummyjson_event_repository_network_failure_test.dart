@@ -55,7 +55,9 @@ void main() {
 
     test('panne de connexion -> NetworkFailure', () async {
       final repository = repositoryOver(
-        MockClient((_) async => throw http.ClientException('Connexion refusée')),
+        MockClient(
+          (_) async => throw http.ClientException('Connexion refusée'),
+        ),
       );
       await expectFailure<NetworkFailure>(repository);
     });
@@ -106,21 +108,23 @@ void main() {
   });
 
   group('Couche appelante (CatalogState) sur un client en échec', () {
-    test('produit l\'état d\'erreur, pas une exception non rattrapée',
-        () async {
-      final catalog = CatalogState(
-        repository: repositoryOver(
-          MockClient((_) async => http.Response('', 500)),
-        ),
-        cache: FakeCatalogCache(),
-      );
-      addTearDown(catalog.dispose);
+    test(
+      'produit l\'état d\'erreur, pas une exception non rattrapée',
+      () async {
+        final catalog = CatalogState(
+          repository: repositoryOver(
+            MockClient((_) async => http.Response('', 500)),
+          ),
+          cache: FakeCatalogCache(),
+        );
+        addTearDown(catalog.dispose);
 
-      await catalog.loadFirstPage(); // ne doit pas lever
+        await catalog.loadFirstPage(); // ne doit pas lever
 
-      expect(catalog.status, CatalogStatus.error);
-      expect(catalog.errorMessage, contains('500'));
-    });
+        expect(catalog.status, CatalogStatus.error);
+        expect(catalog.errorMessage, contains('500'));
+      },
+    );
   });
 
   group('DummyJsonEventRepository — succès et requêtes émises', () {
@@ -150,8 +154,11 @@ void main() {
         }),
       );
 
-      final page =
-          await repository.fetchEvents(limit: 20, skip: 20, query: 'phone');
+      final page = await repository.fetchEvents(
+        limit: 20,
+        skip: 20,
+        query: 'phone',
+      );
 
       expect(requested.path, '/products/search');
       expect(requested.queryParameters['q'], 'phone');
@@ -161,11 +168,14 @@ void main() {
     });
 
     test('un produit en rupture devient un événement complet', () async {
-      final repository =
-          repositoryOver(MockClient((_) async => http.Response(body, 200)));
+      final repository = repositoryOver(
+        MockClient((_) async => http.Response(body, 200)),
+      );
 
-      final event =
-          (await repository.fetchEvents(limit: 20, skip: 0)).events.single;
+      final event = (await repository.fetchEvents(
+        limit: 20,
+        skip: 0,
+      )).events.single;
 
       expect(event.id, '117');
       expect(event.category, 'Home decoration');

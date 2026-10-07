@@ -60,8 +60,8 @@ class _BannerContent extends StatelessWidget {
               const SizedBox(width: 12),
               Expanded(
                 child: Text(
-                  'Hors connexion — données du ${dateLabel(since)}, '
-                  'peut-être plus à jour.',
+                  'Catalogue non actualisé — copie locale du '
+                  '${dateLabel(since)}, peut-être plus à jour.',
                   style: textTheme.bodyMedium?.copyWith(
                     color: colors.onWarningContainer,
                   ),
