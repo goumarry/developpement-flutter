@@ -1,0 +1,31 @@
+# Intégration continue du TP 10 (Partie D, défi 2) : analyse statique et tests
+# à chaque envoi sur le dépôt. Les tests n'ont besoin ni du réseau ni de
+# Firebase : ils tournent tels quels sur une machine vierge.
+name: event_planner_app
+
+on:
+  push:
+    paths:
+      - 'event_planner_app/**'
+      - '.github/workflows/event_planner_app.yml'
+  pull_request:
+    paths:
+      - 'event_planner_app/**'
+
+jobs:
+  analyze-and-test:
+    runs-on: ubuntu-latest
+    defaults:
+      run:
+        working-directory: event_planner_app
+    steps:
+      - uses: actions/checkout@v4
+      - uses: subosito/flutter-action@v2
+        with:
+          channel: stable
+          flutter-version: 3.47.2
+          cache: true
+      - run: flutter --version
+      - run: flutter pub get
+      - run: flutter analyze
+      - run: flutter test
