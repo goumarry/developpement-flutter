@@ -1,0 +1,35 @@
+# Analyse statique durcie (TP 10, partie A).
+# Base : flutter_lints, complétée par des règles additionnelles explicites.
+include: package:flutter_lints/flutter.yaml
+
+analyzer:
+  language:
+    # Interdit les conversions implicites depuis `dynamic` (décodage JSON
+    # notamment) : chaque transtypage doit être écrit et donc vérifié.
+    strict-casts: true
+    strict-raw-types: true
+  errors:
+    # Un Future oublié ou un abonnement non annulé est une erreur, pas un conseil.
+    unawaited_futures: error
+    cancel_subscriptions: error
+    avoid_print: error
+  exclude:
+    - build/**
+    - android/**
+
+linter:
+  rules:
+    # --- Règles additionnelles (au-delà de flutter_lints) --------------------
+    avoid_print: true                  # aucune impression de débogage livrée
+    unawaited_futures: true            # tout Future est attendu ou marqué `unawaited`
+    cancel_subscriptions: true         # tout StreamSubscription est annulé
+    prefer_const_constructors: true    # moins de reconstructions inutiles
+    prefer_const_declarations: true
+    prefer_final_locals: true          # immutabilité par défaut des variables locales
+    prefer_single_quotes: true
+    prefer_relative_imports: true      # imports internes relatifs, cohérents
+    always_declare_return_types: true
+    avoid_dynamic_calls: true          # pas d'appel sur `dynamic` (JSON non typé)
+    directives_ordering: true
+    use_super_parameters: true
+    unnecessary_lambdas: true
