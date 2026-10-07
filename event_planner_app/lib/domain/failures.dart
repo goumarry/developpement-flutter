@@ -17,7 +17,8 @@ sealed class AppFailure implements Exception {
 /// Pas de réseau, DNS, connexion refusée… Transitoire.
 class NetworkFailure extends AppFailure {
   const NetworkFailure([
-    super.message = 'Connexion impossible. Vérifiez votre réseau puis réessayez.',
+    super.message =
+        'Connexion impossible. Vérifiez votre réseau puis réessayez.',
   ]);
 }
 
@@ -31,10 +32,10 @@ class TimeoutFailure extends AppFailure {
 /// Code HTTP inattendu (5xx notamment).
 class ServerFailure extends AppFailure {
   const ServerFailure(this.statusCode, [String? message])
-      : super(
-          message ??
-              'Le service est momentanément indisponible (code $statusCode).',
-        );
+    : super(
+        message ??
+            'Le service est momentanément indisponible (code $statusCode).',
+      );
 
   final int statusCode;
 }
@@ -67,6 +68,7 @@ class PermissionFailure extends AppFailure {
 /// Tout le reste : message générique, jamais le détail technique.
 class UnknownFailure extends AppFailure {
   const UnknownFailure([
-    super.message = 'Une erreur est survenue. Veuillez réessayer dans un instant.',
+    super.message =
+        'Une erreur est survenue. Veuillez réessayer dans un instant.',
   ]);
 }

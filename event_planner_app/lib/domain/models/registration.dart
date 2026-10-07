@@ -24,8 +24,9 @@ class Registration {
       id: json['id'] is String ? json['id'] as String : '',
       userId: json['userId'] is String ? json['userId'] as String : '',
       eventId: eventId,
-      eventTitle:
-          json['eventTitle'] is String ? json['eventTitle'] as String : '',
+      eventTitle: json['eventTitle'] is String
+          ? json['eventTitle'] as String
+          : '',
       participantName: json['participantName'] is String
           ? json['participantName'] as String
           : '',
@@ -69,14 +70,14 @@ class Registration {
   }
 
   Map<String, dynamic> toJson() => {
-        'id': id,
-        'userId': userId,
-        'eventId': eventId,
-        'eventTitle': eventTitle,
-        'participantName': participantName,
-        'participantEmail': participantEmail,
-        'seats': seats,
-      };
+    'id': id,
+    'userId': userId,
+    'eventId': eventId,
+    'eventTitle': eventTitle,
+    'participantName': participantName,
+    'participantEmail': participantEmail,
+    'seats': seats,
+  };
 
   @override
   bool operator ==(Object other) =>
@@ -92,14 +93,14 @@ class Registration {
 
   @override
   int get hashCode => Object.hash(
-        id,
-        userId,
-        eventId,
-        eventTitle,
-        participantName,
-        participantEmail,
-        seats,
-      );
+    id,
+    userId,
+    eventId,
+    eventTitle,
+    participantName,
+    participantEmail,
+    seats,
+  );
 
   @override
   String toString() => 'Registration($eventId, $participantKey, $seats)';

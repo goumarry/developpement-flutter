@@ -1,11 +1,7 @@
 /// Vue immuable de l'utilisateur connecté — Dart pur. L'interface ne manipule
 /// jamais le type `User` du SDK Firebase (mutable, et réservé à `data/`).
 class UserProfile {
-  const UserProfile({
-    required this.uid,
-    required this.email,
-    this.displayName,
-  });
+  const UserProfile({required this.uid, required this.email, this.displayName});
 
   final String uid;
   final String email;

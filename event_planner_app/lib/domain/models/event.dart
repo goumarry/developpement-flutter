@@ -47,8 +47,9 @@ class Event {
       end: end,
       capacity: capacity,
       registered: registered,
-      description:
-          json['description'] is String ? json['description'] as String : '',
+      description: json['description'] is String
+          ? json['description'] as String
+          : '',
       location: json['location'] is String ? json['location'] as String : '',
       isOnline: json['isOnline'] == true,
       price: price is num ? price.toDouble() : 0,
@@ -128,20 +129,20 @@ class Event {
   }
 
   Map<String, dynamic> toJson() => {
-        'id': id,
-        'title': title,
-        'description': description,
-        'category': category,
-        'start': start.toIso8601String(),
-        'end': end.toIso8601String(),
-        'location': location,
-        'isOnline': isOnline,
-        'capacity': capacity,
-        'registered': registered,
-        'price': price,
-        'imageUrl': imageUrl,
-        if (ownerId != null) 'ownerId': ownerId,
-      };
+    'id': id,
+    'title': title,
+    'description': description,
+    'category': category,
+    'start': start.toIso8601String(),
+    'end': end.toIso8601String(),
+    'location': location,
+    'isOnline': isOnline,
+    'capacity': capacity,
+    'registered': registered,
+    'price': price,
+    'imageUrl': imageUrl,
+    if (ownerId != null) 'ownerId': ownerId,
+  };
 
   @override
   bool operator ==(Object other) =>
@@ -163,20 +164,20 @@ class Event {
 
   @override
   int get hashCode => Object.hash(
-        id,
-        title,
-        description,
-        category,
-        start,
-        end,
-        location,
-        isOnline,
-        capacity,
-        registered,
-        price,
-        imageUrl,
-        ownerId,
-      );
+    id,
+    title,
+    description,
+    category,
+    start,
+    end,
+    location,
+    isOnline,
+    capacity,
+    registered,
+    price,
+    imageUrl,
+    ownerId,
+  );
 
   @override
   String toString() => 'Event($id, $title, $registered/$capacity)';
