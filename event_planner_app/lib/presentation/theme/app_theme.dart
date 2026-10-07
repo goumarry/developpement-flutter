@@ -94,9 +94,16 @@ class AppStatusColors extends ThemeExtension<AppStatusColors> {
     if (other == null) return this;
     return AppStatusColors(
       success: Color.lerp(success, other.success, t)!,
-      warningContainer: Color.lerp(warningContainer, other.warningContainer, t)!,
-      onWarningContainer:
-          Color.lerp(onWarningContainer, other.onWarningContainer, t)!,
+      warningContainer: Color.lerp(
+        warningContainer,
+        other.warningContainer,
+        t,
+      )!,
+      onWarningContainer: Color.lerp(
+        onWarningContainer,
+        other.onWarningContainer,
+        t,
+      )!,
     );
   }
 }
