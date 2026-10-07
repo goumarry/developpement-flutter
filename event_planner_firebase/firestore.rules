@@ -1,0 +1,18 @@
+rules_version = '2';
+service cloud.firestore {
+  match /databases/{database}/documents {
+    match /events/{eventId} {
+      // Lecture / modification / suppression : uniquement par le propriétaire
+      // authentifié du document. Un client non authentifié a request.auth == null,
+      // donc la comparaison échoue : tout est refusé.
+      allow read, update, delete: if request.auth != null
+                                  && resource.data.ownerId == request.auth.uid;
+
+      // Création : le document créé doit porter l'UID de l'utilisateur connecté
+      // comme propriétaire (impossible de créer un événement « au nom » d'autrui).
+      allow create: if request.auth != null
+                    && request.resource.data.ownerId == request.auth.uid;
+    }
+    // Tout le reste est refusé par défaut (aucune règle = refus).
+  }
+}

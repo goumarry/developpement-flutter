@@ -1,0 +1,40 @@
+{
+  "flutter": {
+    "platforms": {
+      "android": {
+        "default": {
+          "projectId": "event-planner-firebase-yg",
+          "appId": "1:754477825720:android:8944df4857008c0e433e4d",
+          "fileOutput": "android/app/google-services.json"
+        }
+      },
+      "dart": {
+        "lib/firebase_options.dart": {
+          "projectId": "event-planner-firebase-yg",
+          "configurations": {
+            "android": "1:754477825720:android:8944df4857008c0e433e4d",
+            "web": "1:754477825720:web:a074312d9e12f7eb433e4d",
+            "windows": "1:754477825720:web:37aad00dab54dabb433e4d"
+          }
+        }
+      }
+    }
+  },
+  "firestore": {
+    "rules": "firestore.rules",
+    "indexes": "firestore.indexes.json"
+  },
+  "emulators": {
+    "auth": {
+      "port": 9099
+    },
+    "firestore": {
+      "port": 8080
+    },
+    "ui": {
+      "enabled": true,
+      "port": 4000
+    },
+    "singleProjectMode": true
+  }
+}

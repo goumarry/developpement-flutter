@@ -1,0 +1,65 @@
+# Miscellaneous
+*.class
+*.log
+*.pyc
+*.swp
+.DS_Store
+.atom/
+.build/
+.buildlog/
+.history
+.svn/
+.swiftpm/
+migrate_working_dir/
+
+# IntelliJ related
+*.iml
+*.ipr
+*.iws
+.idea/
+
+# The .vscode folder contains launch configuration and tasks you configure in
+# VS Code which you may wish to be included in version control, so this line
+# is commented out by default.
+#.vscode/
+
+# Flutter/Dart/Pub related
+**/doc/api/
+**/ios/Flutter/.last_build_id
+.dart_tool/
+.flutter-plugins-dependencies
+.pub-cache/
+.pub/
+/build/
+/coverage/
+
+# Symbolication related
+app.*.symbols
+
+# Obfuscation related
+app.*.map.json
+
+# Android Studio will place build artifacts here
+/android/app/debug
+/android/app/profile
+/android/app/release
+
+# Widget Preview related
+.widget_preview/
+
+# --- TP 8 : Firebase -------------------------------------------------------
+# DÉCISION (justifiée dans README.md, « Gestion de version des fichiers de
+# configuration ») : lib/firebase_options.dart, android/app/google-services.json
+# (et GoogleService-Info.plist) SONT versionnés — ce sont des identifiants de
+# projet publics, pas des secrets ; la sécurité repose sur firestore.rules.
+# En revanche, journaux, caches locaux de la CLI et données d'émulateur ne le
+# sont pas, et une vraie clé secrète (clé de compte de service, jeton d'API
+# tiers) ne devrait JAMAIS entrer dans ce dépôt.
+firebase-debug.log
+firebase-debug.*.log
+ui-debug.log
+firestore-debug.log
+.firebase/
+emulator-data/
+*-adminsdk-*.json
+serviceAccount*.json
