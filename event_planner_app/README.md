@@ -34,6 +34,10 @@ hors connexion.
   n'existe aucun compteur partagé à protéger. Deux comptes différents peuvent
   donc chacun prendre « la dernière place ». Le **doublon**, lui, est bloqué
   aussi par le serveur (identifiant de document déterministe).
+  Détail au § 11.
+- **Revue de pair** : non réalisée ; aucun fichier `REVUE-PAIR.md` n'est
+  remis. La revue de code du rendu est celle de la Partie C.3, dans
+  `USAGE-IA.md`.
 - **Compteur d'inscrits des événements d'organisateur** : non stocké ; la
   jauge compte les inscriptions de l'utilisateur connecté.
 - **Tri** : appliqué aux événements déjà chargés, pas à tout le catalogue (la
@@ -259,10 +263,28 @@ Artefact généré : `flutter build apk --release` →
 
 ## 9. Intégration continue (défi D.2)
 
-`.github/workflows/event_planner_app.yml` (à la racine du dépôt) exécute
-`flutter analyze` et `flutter test` à chaque envoi touchant
-`event_planner_app/`. **Preuve d'exécution : à ajouter** (lien ou capture de
-l'onglet *Actions*) après le premier envoi de la branche sur GitHub.
+`.github/workflows/event_planner_app.yml` (à la racine du dépôt, là où GitHub
+le cherche) exécute, à chaque envoi qui touche `event_planner_app/` :
+
+1. `flutter pub get`
+2. `flutter analyze` — échoue au moindre avertissement ;
+3. `flutter test` — les 84 tests, sans réseau ni Firebase, donc sans aucun
+   secret à configurer sur GitHub.
+
+La version de Flutter est fixée (3.47.2) pour que l'analyse donne le même
+résultat que sur le poste de développement.
+
+**Preuve d'exécution : non fournie à ce stade.** Le fichier est versionné
+mais la branche n'a pas encore été envoyée sur GitHub ; aucune exécution n'a
+donc eu lieu, et le bonus n'est pas acquis tant que ce n'est pas fait :
+
+```bash
+git push -u origin tp10-event-planner-app
+```
+
+Puis, sur GitHub, onglet *Actions* > exécution « event_planner_app » : y
+relever le lien (ou une capture `captures/09-integration-continue.png`) et
+le reporter ici.
 
 ## 10. Choix d'architecture assumés
 
@@ -278,6 +300,39 @@ l'onglet *Actions*) après le premier envoi de la branche sur GitHub.
 | Formatage des dates à la main | Paquet `intl` | Deux fonctions pures suffisent ; une dépendance de moins, et des tests de widget sans initialisation de locale. |
 | Tri côté client | Paramètres `sortBy` / `order` de l'API | Signature imposée ; limite documentée au § 1. |
 | Routes nommées + `onGenerateRoute` | `go_router` | Hors des séances 1 à 9. |
+
+## 11. Limite connue : la capacité n'est pas imposée par le serveur
+
+**Ce qui est garanti.** Dans l'application, une inscription est refusée dès
+que `places de la source + places de l'utilisateur (panier et confirmées) +
+places demandées` dépasse la capacité (`domain/rules/capacity_rule.dart`,
+appelée par `RegistrationCartState.add`). Le **doublon**, lui, est refusé
+deux fois : par l'application, et par le serveur (`firestore.rules`).
+
+**Ce qui ne l'est pas.** Pour un événement du catalogue, rien côté serveur
+ne compte les places prises par **l'ensemble** des comptes :
+
+- deux utilisateurs différents peuvent chacun s'inscrire à « la dernière
+  place » : chacun ne voit que ses propres inscriptions ;
+- un client modifié peut écrire une inscription sans passer par
+  `CapacityRule` (les règles limitent seulement à 6 places par inscription).
+
+**Pourquoi.** Le catalogue vient de DummyJSON, en lecture seule : il n'existe
+aucun document partagé où tenir un compteur. Et une règle de sécurité
+Firestore ne sait pas additionner les documents d'une collection : elle ne
+peut lire que des documents précis (`get()`).
+
+**Ce qu'il faudrait pour la lever** (hors des séances 1 à 9) : un document
+compteur par événement, mis à jour dans la **même transaction** que
+l'inscription, avec une règle qui lit ce compteur — ou une Cloud Function qui
+valide l'inscription côté serveur. Dans les deux cas le compteur doit être
+modifiable par d'autres comptes que le propriétaire de l'événement, ce qui
+demande une collection distincte de `events` pour ne pas affaiblir
+l'isolation entre organisateurs.
+
+**Pourquoi c'est acceptable ici.** L'exigence de protection par les règles
+porte sur les événements d'organisateur (prouvée, § 5.6). La limite est
+écrite, visible, et son correctif identifié.
 
 ## Captures
 

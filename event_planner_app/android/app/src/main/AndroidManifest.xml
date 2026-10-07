@@ -1,6 +1,10 @@
 <manifest xmlns:android="http://schemas.android.com/apk/res/android">
+    <!-- Seule permission de l'application : appels à l'API du catalogue et à
+         Firebase. Déclarée ici, et pas seulement dans le manifeste de
+         débogage, pour que l'artefact de publication l'ait explicitement. -->
+    <uses-permission android:name="android.permission.INTERNET"/>
     <application
-        android:label="event_planner_app"
+        android:label="Event Planner"
         android:name="${applicationName}"
         android:icon="@mipmap/ic_launcher">
         <activity

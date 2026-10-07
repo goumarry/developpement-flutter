@@ -110,6 +110,57 @@ Déclaration : [ ] je n'ai utilisé aucune IA sur ce TP  /  [x] entrées ci-dess
 - Correction apportée et vérification faite : permission ajoutée au manifeste
   principal, libellé `Event Planner`, puis `flutter build apk --release`.
 
+## Entrée 7
+- Date et heure : 2026-10-07, en fin de séance
+- Partie du TP concernée : C.2 (artefact de publication)
+- Pourquoi j'ai sollicité l'IA : reprise après une interruption de la session.
+- Ce que j'ai demandé : « reprends là où tu t'es arrêté ».
+- Ce que j'ai obtenu : le constat que la compilation en mode release lancée
+  avant l'interruption **n'avait pas abouti** (seul l'APK de débogage
+  existait), alors que l'entrée 6 la supposait faite ; puis sa relance.
+- Décision : acceptée après correction
+- Si refusée ou corrigée, pourquoi : une étape annoncée n'était pas réellement
+  terminée.
+- Correction apportée et vérification faite : état vérifié avant de continuer
+  (`git status`, contenu de `build/app/outputs/flutter-apk/`), puis
+  `flutter build apk --release` relancé.
+
+## Entrée 8
+- Date et heure : 2026-10-07, en fin de séance
+- Partie du TP concernée : séance 8 (Firebase)
+- Pourquoi j'ai sollicité l'IA : doute — je voulais être sûr que Firebase
+  était réellement relié, pas seulement configuré.
+- Ce que j'ai demandé : « et Firebase, tu as tout relié ? »
+- Ce que j'ai obtenu : la liste de ce qui est branché (application Android
+  enregistrée dans le projet `event-planner-firebase-yg`,
+  `google-services.json`, `firebase_options.dart`, règles déployées) et de ce
+  qui a été **constaté** sur l'émulateur (création de compte, session
+  restaurée, inscription confirmée, événement créé), avec ses limites :
+  essais faits sur l'APK de débogage uniquement, Android seul, et
+  modification / suppression d'événement non rejouées à l'écran.
+- Décision : acceptée telle quelle
+- Vérification faite : compte de test et documents visibles dans la console
+  Firebase (Authentication, collections `events` et `registrations`).
+
+## Entrée 9
+- Date et heure : 2026-10-07, en fin de séance
+- Partie du TP concernée : livrables (README, USAGE-IA)
+- Pourquoi j'ai sollicité l'IA : rédaction.
+- Ce que j'ai demandé : rédiger le bilan de ce fichier, une fiche de
+  préparation à la soutenance, la marche à suivre pour la preuve
+  d'intégration continue et l'explication de la limite sur la capacité. J'ai
+  aussi demandé d'ajouter ici « quelques petites demandes que j'aurais pu
+  poser ».
+- Ce que j'ai obtenu : les documents demandés. Pour les entrées, uniquement
+  celles qui correspondent à des demandes **réellement faites** (7, 8 et 9).
+- Décision : acceptée après correction
+- Si refusée ou corrigée, pourquoi : code non conforme aux consignes —
+  l'énoncé demande une entrée par sollicitation réelle ; des demandes
+  inventées auraient faussé la déclaration.
+- Correction apportée et vérification faite : entrées limitées aux
+  sollicitations qui ont eu lieu ; revue de pair retirée du rendu (décision de
+  ma part, voir README § 1).
+
 ## Revue de code par l'IA (Partie C.3)
 
 Revue demandée à Claude Code sur l'ensemble de `lib/`, ciblée sur
@@ -146,12 +197,33 @@ catégorie.
 | A6 | Les libellés sont en dur dans les widgets (pas d'internationalisation). | **Périmètre** : défi D.3, non choisi. |
 
 ## Bilan
-- Sur quoi l'IA m'a réellement fait gagner du temps : _à compléter par moi
-  après relecture_ (pistes : mise en place des quatre couches, écriture des
-  doubles de test, script de preuve des règles, vérification à l'écran des
-  scénarios).
-- Sur quoi elle m'a coûté du temps : _à compléter_ (pistes : le volume de
-  code à relire et à comprendre avant la soutenance ; les deux erreurs de
-  compilation de l'entrée 1).
-- Ce que je saurais refaire sans elle à l'issue de ce TP : _à compléter
-  honnêtement après avoir relu chaque fichier_.
+- Sur quoi l'IA m'a réellement fait gagner du temps :
+  - la mise en place des quatre couches et de la configuration (analyse
+    statique, thème, routes, enregistrement de l'application dans Firebase) ;
+  - l'écriture des doubles de test et des 84 tests, la partie la plus
+    répétitive ;
+  - l'adaptation du script de preuve des règles du TP 8 aux inscriptions ;
+  - la vérification des scénarios à l'écran, pilotée par `adb`, et les
+    captures ;
+  - la rédaction du README à partir de ce qui avait été réellement constaté.
+- Sur quoi elle m'a coûté du temps :
+  - le **volume à relire** : une soixantaine de fichiers produits en une
+    séance, que je dois comprendre un par un avant la soutenance — c'est le
+    vrai coût de cet usage, et il n'est pas derrière moi ;
+  - les deux erreurs de compilation de l'entrée 1 ;
+  - une interruption de session, après laquelle une étape annoncée comme
+    faite (la compilation release) ne l'était pas (entrée 7) ;
+  - le besoin de faire confirmer par des preuves ce qui était « branché »
+    (entrée 8) : une affirmation de l'assistant ne vaut pas constat.
+- Ce que je saurais refaire sans elle à l'issue de ce TP :
+  - ce que j'avais déjà pratiqué aux TP précédents et que je retrouve ici :
+    composer des widgets sans débordement, déclarer des routes nommées avec
+    arguments et valeur de retour, écrire un `ChangeNotifier` et l'exposer
+    par Provider, appeler une API paginée et traiter ses erreurs, écrire un
+    validateur et une règle croisée, lire et écrire une préférence, écrire
+    une règle Firestore fondée sur `request.auth.uid` ;
+  - ce que je ne saurais **pas** encore refaire seul sans rouvrir le code :
+    le découpage en interfaces de dépôt injectées depuis `main.dart`, le
+    test qui vérifie la règle de dépendance, les tests de widget avec
+    doubles, et l'identifiant d'inscription déterministe qui bloque le
+    doublon côté serveur. Ce sont les points que je révise en priorité.
