@@ -6,6 +6,7 @@ import 'package:http/http.dart' as http;
 import '../../domain/failures.dart';
 import '../../domain/models/event.dart';
 import '../../domain/models/event_page.dart';
+import '../../domain/models/network_demo_mode.dart';
 import '../../domain/repositories/event_repository.dart';
 
 /// Catalogue d'événements adossé à https://dummyjson.com.
@@ -23,7 +24,10 @@ class DummyJsonEventRepository implements EventRepository {
     this.requestTimeout = const Duration(seconds: 8),
     this.maxAttempts = 2,
     this.retryDelay = const Duration(seconds: 1),
-  });
+    NetworkDemoMode Function()? demoMode,
+  }) : _demoMode = demoMode ?? _alwaysNormal;
+
+  static NetworkDemoMode _alwaysNormal() => NetworkDemoMode.normal;
 
   static const String _host = 'dummyjson.com';
 
@@ -40,6 +44,10 @@ class DummyJsonEventRepository implements EventRepository {
   /// 5xx). Un 404 ou un JSON illisible ne sont jamais rejoués.
   final int maxAttempts;
   final Duration retryDelay;
+
+  /// Lu **à chaque requête** : le mode de démonstration choisi dans les
+  /// réglages s'applique immédiatement, sans recréer le dépôt.
+  final NetworkDemoMode Function() _demoMode;
 
   @override
   Future<EventPage> fetchEvents({
@@ -117,8 +125,9 @@ class DummyJsonEventRepository implements EventRepository {
     return Event(
       id: '$id',
       title: title,
-      description:
-          json['description'] is String ? json['description'] as String : '',
+      description: json['description'] is String
+          ? json['description'] as String
+          : '',
       category: category is String ? _categoryLabel(category) : 'Divers',
       start: start,
       end: start.add(const Duration(hours: 2)),
@@ -159,9 +168,16 @@ class DummyJsonEventRepository implements EventRepository {
       (failure is ServerFailure && failure.statusCode >= 500);
 
   Future<Map<String, dynamic>> _getJsonOnce(Uri uri) async {
+    final target = switch (_demoMode()) {
+      NetworkDemoMode.normal => uri,
+      NetworkDemoMode.slow => uri.replace(
+        queryParameters: {...uri.queryParameters, 'delay': '3000'},
+      ),
+      NetworkDemoMode.serverError => Uri.https(_host, '/http/500'),
+    };
     final http.Response response;
     try {
-      response = await _client.get(uri).timeout(requestTimeout);
+      response = await _client.get(target).timeout(requestTimeout);
     } on TimeoutException {
       throw const TimeoutFailure();
     } on http.ClientException {

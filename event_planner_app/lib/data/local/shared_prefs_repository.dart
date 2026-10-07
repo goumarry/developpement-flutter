@@ -14,7 +14,7 @@ import '../../domain/repositories/preferences_repository.dart';
 /// sur la valeur par défaut au lieu de faire échouer la lecture.
 class SharedPrefsRepository implements PreferencesRepository {
   SharedPrefsRepository({SharedPreferencesAsync? preferences})
-      : _prefs = preferences ?? SharedPreferencesAsync();
+    : _prefs = preferences ?? SharedPreferencesAsync();
 
   static const String _themeKey = 'pref_theme';
   static const String _sortKey = 'pref_default_sort';

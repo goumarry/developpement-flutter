@@ -1,0 +1,60 @@
+rules_version = '2';
+service cloud.firestore {
+  match /databases/{database}/documents {
+
+    function signedIn() {
+      return request.auth != null;
+    }
+
+    // --- Événements d'organisateur -----------------------------------------
+    // Un organisateur ne voit et ne modifie QUE ses propres événements.
+    // L'interface filtre déjà sur ownerId, mais c'est ici que la restriction
+    // est réellement imposée : un client modifié n'y échappe pas.
+    match /events/{eventId} {
+      // `resource` = document existant. Non authentifié : request.auth est
+      // null, la condition est fausse, tout est refusé.
+      allow read, delete: if signedIn()
+                          && resource.data.ownerId == request.auth.uid;
+
+      // `request.resource` = document tel qu'il serait après l'écriture.
+      // Impossible de créer un événement « au nom » d'un autre compte.
+      allow create: if signedIn()
+                    && request.resource.data.ownerId == request.auth.uid
+                    && request.resource.data.title is string
+                    && request.resource.data.title.size() > 0;
+
+      // Modification : être propriétaire AVANT, et le rester APRÈS (on ne
+      // peut pas « donner » son événement à un autre compte).
+      allow update: if signedIn()
+                    && resource.data.ownerId == request.auth.uid
+                    && request.resource.data.ownerId == request.auth.uid;
+    }
+
+    // --- Inscriptions confirmées -------------------------------------------
+    match /registrations/{registrationId} {
+      allow read, delete: if signedIn()
+                          && resource.data.userId == request.auth.uid;
+
+      // L'identifiant du document est imposé :
+      //   <uid>_<eventId>_<courriel du participant en minuscules>
+      // Une deuxième inscription de la même personne au même événement vise
+      // donc le MÊME document ; ce serait une mise à jour, or aucune règle
+      // `update` n'existe : elle est refusée. Le doublon est bloqué par le
+      // serveur, pas seulement par l'application.
+      allow create: if signedIn()
+                    && request.resource.data.userId == request.auth.uid
+                    && request.resource.data.eventId is string
+                    && request.resource.data.participantEmail is string
+                    && request.resource.data.participantEmail
+                         == request.resource.data.participantEmail.lower()
+                    && request.resource.data.seats is int
+                    && request.resource.data.seats >= 1
+                    && request.resource.data.seats <= 6
+                    && registrationId == request.auth.uid + '_'
+                         + request.resource.data.eventId + '_'
+                         + request.resource.data.participantEmail;
+    }
+
+    // Tout le reste : refusé par défaut (aucune règle = refus).
+  }
+}
